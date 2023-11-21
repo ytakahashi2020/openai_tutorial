@@ -5,7 +5,7 @@ client = OpenAI()
 response = client.audio.speech.create(
     model="tts-1-hd",
     voice="nova",
-    input="こんにちは、私はノバです。今日はいい天気ですね。",
+    input="Hallo, mein Name ist Yuki.Es ist ein schöner Tag heute.",
 )
 
-response.stream_to_file("output2.mp3")
+response.stream_to_file("output3.mp3")
