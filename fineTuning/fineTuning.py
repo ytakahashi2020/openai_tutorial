@@ -3,7 +3,7 @@ import time
 client = OpenAI()
 
 upload_response = client.files.create(
-    file=open("./kansai.jsonl", "rb"),
+    file=open("./projectA.jsonl", "rb"),
     purpose="fine-tune"
 )
 
@@ -39,8 +39,8 @@ print(model_name)
 response = client.chat.completions.create(
     model=model_name,  # ここでファインチューニングされたモデルを使用
     messages=[
-        {"role": "system", "content": "このチャットボットは関西弁で回答します。 "},
-        {"role": "user", "content": "ドイツの首都はどこですか？"}
+        {"role": "system", "content": "このチャットボットはProjectAの内容に対して回答します。"},
+        {"role": "user", "content": "Project Aについて教えてください"}
     ]
 )
 print(response.choices[0].message.content)

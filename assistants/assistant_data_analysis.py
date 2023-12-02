@@ -32,7 +32,7 @@ message = client.beta.threads.messages.create(
 run = client.beta.threads.runs.create(
     thread_id=thread.id,
     assistant_id=assistant.id,
-    instructions="What are the most popular tracks and their artists?"
+    instructions="What are the most popular tracks and their artists? and please provide me the top5 csv file."
 )
 
 print(run.model_dump_json(indent=4))
@@ -56,9 +56,20 @@ while True:
 
         # Loop through messages and print content based on role
         for msg in messages.data:
+            print(msg)
             role = msg.role
             content = msg.content[0].text.value
-            print(f"{role.capitalize()}: {content}")
+            # print(f"{role.capitalize()}: {content}")
+            if msg.content[0].text.annotations:
+                content2 = msg.content[0].text.annotations[0].file_path.file_id
+                print(f"File ID: {content2}")
+                file_data = client.files.retrieve_content(file_id=content2)
+                print("file_data: ", file_data)
+                file_data_bytes = file_data.encode()
+
+                # ローカルのファイルに書き込み
+                with open("./my-file.csv", "wb") as file:
+                    file.write(file_data_bytes)
         break
     else:
         print("Waiting for the Assistant to process...")

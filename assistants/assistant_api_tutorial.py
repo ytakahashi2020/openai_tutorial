@@ -29,7 +29,8 @@ run = client.beta.threads.runs.create(
     instructions="Please address the user as Jane Doe. The user has a premium account."
 )
 
-print(run.model_dump_json(indent=4))
+# print(run.model_dump_json(indent=4))
+print("Status:", run.status)
 
 while True:
     # Wait for 5 seconds
@@ -40,7 +41,8 @@ while True:
         thread_id=thread.id,
         run_id=run.id
     )
-    print(run_status.model_dump_json(indent=4))
+    # print(run_status.model_dump_json(indent=4))
+    print("Status:", run_status.status)
 
     # If run is completed, get messages
     if run_status.status == 'completed':
