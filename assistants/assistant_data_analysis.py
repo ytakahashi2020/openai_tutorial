@@ -25,17 +25,17 @@ thread = client.beta.threads.create()
 message = client.beta.threads.messages.create(
     thread_id=thread.id,
     role="user",
-    content="What are the most popular tracks and their artists?"
+    content="Please tell me top3 popular artists by using the csv file and please provide me the csv file."
 )
 
 # Step 4: Run the Assistant
 run = client.beta.threads.runs.create(
     thread_id=thread.id,
     assistant_id=assistant.id,
-    instructions="What are the most popular tracks and their artists? and please provide me the top5 csv file."
+    # instructions="What are the most popular tracks and their artists? and please provide me the top5 csv file."
 )
 
-print(run.model_dump_json(indent=4))
+print("Status:", run.status)
 
 while True:
     # Wait for 5 seconds
@@ -46,7 +46,7 @@ while True:
         thread_id=thread.id,
         run_id=run.id
     )
-    print(run_status.model_dump_json(indent=4))
+    print("Status:", run_status.status)
 
     # If run is completed, get messages
     if run_status.status == 'completed':
@@ -56,14 +56,13 @@ while True:
 
         # Loop through messages and print content based on role
         for msg in messages.data:
-            print(msg)
             role = msg.role
             content = msg.content[0].text.value
             # print(f"{role.capitalize()}: {content}")
             if msg.content[0].text.annotations:
-                content2 = msg.content[0].text.annotations[0].file_path.file_id
-                print(f"File ID: {content2}")
-                file_data = client.files.retrieve_content(file_id=content2)
+                file_id = msg.content[0].text.annotations[0].file_path.file_id
+                print("file_id: ", file_id)
+                file_data = client.files.retrieve_content(file_id=file_id)
                 print("file_data: ", file_data)
                 file_data_bytes = file_data.encode()
 

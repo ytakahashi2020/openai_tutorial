@@ -54,7 +54,6 @@ message = client.beta.threads.messages.create(
 run = client.beta.threads.runs.create(
     thread_id=thread.id,
     assistant_id=assistant.id,
-    instructions="Please address the user as Yuki Takahashi."
 )
 
 print(run.model_dump_json(indent=4))

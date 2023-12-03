@@ -5,7 +5,7 @@ import time
 client = openai.OpenAI()
 
 file = client.files.create(
-    file=open("./nobu.txt", "rb"),
+    file=open("./nobunaga.txt", "rb"),
     purpose='assistants'
 )
 
@@ -25,17 +25,16 @@ thread = client.beta.threads.create()
 message = client.beta.threads.messages.create(
     thread_id=thread.id,
     role="user",
-    content="Tell me about Nobunaga Oda."
+    content="Tell me about Nobunaga Oda in 30 words."
 )
 
 # Step 4: Run the Assistant
 run = client.beta.threads.runs.create(
     thread_id=thread.id,
     assistant_id=assistant.id,
-    instructions="Please address the user as Yuki Takahashi."
 )
 
-print(run.model_dump_json(indent=4))
+print("Status:", run.status)
 
 while True:
     # Wait for 5 seconds
@@ -46,7 +45,7 @@ while True:
         thread_id=thread.id,
         run_id=run.id
     )
-    print(run_status.model_dump_json(indent=4))
+    print("Status:", run_status.status)
 
     # If run is completed, get messages
     if run_status.status == 'completed':
